@@ -1,0 +1,136 @@
+package operacional;
+import java_cup.runtime.Symbol;
+import java.io.*;
+import java.lang.*;
+
+%%
+%public
+%cup
+%line
+%char
+%ignorecase
+%type java_cup.runtime.Symbol
+%class an_lex
+%implements java_cup.runtime.Scanner
+%{
+	private String[] estados;
+	private Integer detalles[] = new Integer[]{0,0,0,0,0};
+	private Integer signo=0, id=0, numero=0, linea=0, opar=0, i=0;
+
+	private void putStatus(String str){
+    	int i = estados.length;
+    	estados[i++]=str;
+  	}
+
+  	private void putDetails(Integer l){
+  		int n=detalles[l];
+    	detalles[l]=n+1;
+    	/*
+		*	0	-	Signo
+		*	1	- 	Identificador
+		*	2 	-	Numero
+		*	3	-	Linea
+		*	4	-	Operador Aritmetico
+    	*/
+  	}
+
+  	public String[] getStatus(){
+  		return estados;
+  	}
+  	public Integer[] getDetails(){
+  		return detalles;
+  	}
+%}
+%eofval{
+	//System.out.println("Fin del archivo");
+	return null;
+%eofval}
+
+num = ([0-9]+(\.)*[0-9]*)
+word = [a-zA-Z0-9_.]+
+colon=":"
+llaveA="{"
+llaveC="}"
+coma=","
+dcomilla="\""
+mas="+"
+menos="-"
+por="*"
+div="/"
+
+%%
+{num} 	{	
+			putDetails(2);
+			//System.out.println(yytext());
+			//putStatus("Numero: "+new Double(Double.parseDouble(yytext()))); 
+			return new Symbol(sym.num, new Double(Double.parseDouble(yytext())));
+		}
+{word} 	{	
+			//System.out.println(yytext());
+			putDetails(1);
+			//putStatus("Identificador: "+ new String(yytext())); 
+			return new Symbol(sym.word, yytext());
+		}
+{colon}	{	
+			//System.out.println(yytext());
+			putDetails(0);
+			//putStatus("Signo: "+ new String(yytext()));
+			return new Symbol(sym.colon, new String(yytext()));
+		}
+{llaveA} 	{	
+				//System.out.println(yytext());
+				putDetails(0);
+				//putStatus("Signo: "+ new String(yytext()));
+				return new Symbol(sym.llaveA, new String(yytext()));
+			}
+{llaveC} 	{	
+				//System.out.println(yytext());
+				putDetails(0);
+				//putStatus("Signo: "+ new String(yytext()));
+				return new Symbol(sym.llaveC, new String(yytext()));
+			}
+{coma} 	{	
+			//System.out.println(yytext());
+			putDetails(0);
+			//putStatus("Signo: "+ new String(yytext()));
+			return new Symbol(sym.coma, new String(yytext()));
+		}
+{mas} 	{	
+			//System.out.println(yytext());
+			putDetails(4);
+			//putStatus("Operador Aritmetico: "+ new String(yytext()));
+			return new Symbol(sym.mas, new String(yytext()));
+		}
+{menos}	{	
+			//System.out.println(yytext());
+			putDetails(4);
+			//putStatus("Operador Aritmetico: "+ new String(yytext()));
+			return new Symbol(sym.menos, new String(yytext()));
+		}
+{div} 	{	
+			//System.out.println(yytext());
+			putDetails(4);
+			//putStatus("Operador Aritmetico: "+ new String(yytext())); 
+			return new Symbol(sym.div, new String(yytext()));
+		}
+{por} 	{	
+			//System.out.println(yytext());
+			putDetails(4);
+			//putStatus("Operador Aritmetico: "+ new String(yytext()));
+			return new Symbol(sym.por, new String(yytext()));
+		}
+{dcomilla} 	{	
+				//System.out.println(yytext());
+				putDetails(0);
+				//putStatus("Signo: \"");
+				return new Symbol(sym.dcomilla, new String(yytext()));
+			}
+[\t\r\f]	{		}
+[\n] 	{	
+			putDetails(3);
+		}
+" " 	{		
+		}
+. 	{	
+		//putStatus("Error Lexico: " + yytext());
+	}

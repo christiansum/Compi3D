@@ -1,0 +1,109 @@
+package operacional;
+import java_cup.runtime.*; 
+import java.io.*;
+import java.util.*;
+import java.lang.*;
+
+parser code{:
+    /*-------------------------------Variables-----------------------------------*/
+    int i=0;
+    public an_lex lexer2 = new an_lex(new StringReader("\""));
+    ArrayList errores = new ArrayList();
+    ArrayList listap = new ArrayList();
+    ArrayList NombreProyecto = new ArrayList();
+    /*------------------------------Parser---------------------------------------*/
+    public void syntax_error(Symbol st){
+        report_error("Error Sintactico",null);
+    }
+
+    public static void cargarFile(String archivo) throws Exception{
+        new parser(new an_lex(new FileInputStream(archivo))).parse();
+    }
+
+    public void cargarString(String texto) throws Exception{
+        an_lex lexer = new an_lex(new StringReader(texto));
+        parser parser_string = new parser(lexer);
+        parser_string.parse();
+        this.listap = parser_string.listap;
+        this.NombreProyecto = parser_string.NombreProyecto;
+        lexer2=lexer;
+    }
+    public ArrayList getObjto(){
+        return this.listap;
+    }
+
+    public void setResultado(ArrayList res){
+        this.listap=res;
+    }
+
+
+    /*--------------------------------Lexer----------------------------------------*/
+    public String[] getLexStatus(){
+        return lexer2.getStatus();
+    }
+
+    public Integer[] getLexDetails() throws Exception{
+        System.out.println("getdetalles:"+lexer2.getDetails());
+        return lexer2.getDetails();
+    } 
+:}
+
+action code{:
+
+:}
+
+terminal colon, llaveA, llaveC, coma, dcomilla,mas,menos,por,div; 
+
+terminal String word;
+
+terminal Double num;
+
+non terminal Double Operaciones, Second, Valor, Valores;
+
+non terminal ArrayList S, ListaP, ObAt;
+
+non terminal NumLetra;
+
+start with S;
+S   ::= llaveA ObAt:atr coma ListaP:lista llaveC {: 
+                                                        ArrayList fin = new ArrayList();
+                                                        fin.add(atr);
+                                                        fin.add(lista);
+                                                        parser.NombreProyecto.add(atr);
+                                                        RESULT=fin;
+                                                        parser.setResultado(RESULT);
+                                                        //System.out.println(RESULT+"\n");
+                                                    :};
+ListaP  ::= ListaP:lp coma ObAt:ob2 {: 
+                                            lp.add(ob2);
+                                            RESULT=lp;
+                                        :}
+        | ObAt:ob1 {: 
+                        ArrayList llp = new ArrayList();
+                        llp.add(ob1);
+                        RESULT =llp;
+                    :};
+
+ObAt  ::=  dcomilla NumLetra:nameO dcomilla colon llaveA ListaP:valO llaveC {: 
+                                                                                ArrayList obj = new ArrayList();
+                                                                                obj.add(nameO);
+                                                                                obj.add(valO);
+                                                                                RESULT = obj;
+                                                                            :}
+        |   dcomilla NumLetra:nameA dcomilla colon dcomilla NumLetra:valA dcomilla   {: 
+                                                                                        ArrayList atri = new ArrayList();
+                                                                                        atri.add(nameA);
+                                                                                        atri.add(valA);  
+                                                                                        RESULT =  atri;
+                                                                                    :};
+
+NumLetra::= word:w {:   RESULT = w.toString();   :}
+
+        | Operaciones:o {: RESULT = o;:};
+Operaciones ::= Operaciones:o mas Second:s {: RESULT = o + s; :}
+            | Operaciones:o menos Second:s {: RESULT = o - s; :}
+            | Second:s {: RESULT = s; :};
+Second  ::= Second:s por Valor:v {: RESULT = s * v; :}
+        | Second:s  div Valor:v {: RESULT = s / v; :}
+        | Valor:v {: RESULT = v; :};
+Valor   ::= num:v {: RESULT = new Double(v);:};

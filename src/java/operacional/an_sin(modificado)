@@ -1,0 +1,221 @@
+package operacional;
+import java_cup.runtime.*; 
+import java.io.*;
+import java.util.*;
+import java.lang.*;
+
+parser code{:
+    /*-------------------------------Variables-----------------------------------*/
+    int i=0;
+    public an_lex lexer2 = new an_lex(new StringReader("\""));
+    //parser parser_string2 = new parser(lexer2);
+
+    ArrayList errores = new ArrayList();
+    ArrayList listap = new ArrayList();
+    ArrayList NombreProyecto = new ArrayList();
+    /*------------------------------Parser---------------------------------------*/
+    public void syntax_error(Symbol st){
+       ArrayList info = new ArrayList();
+       info.add("Error Sintactico");
+       info.add("Objeto: ");
+       //report_error("Error Sintactico:"+ st,null);
+    }
+
+    public static void cargarFile(String archivo) throws Exception{
+        new parser(new an_lex(new FileInputStream(archivo))).parse();
+    }
+
+    public void cargarString(String texto) throws Exception{
+        an_lex lexer = new an_lex(new StringReader(texto));
+        parser parser_string = new parser(lexer);
+        parser_string.parse();
+        this.listap = parser_string.listap;
+        this.NombreProyecto = parser_string.NombreProyecto;
+        lexer2=lexer;
+    }
+    public ArrayList getObjto(){
+        return this.listap;
+    }
+
+    public void mostrarlista(){
+       //System.out.println(this.listap+"***********");
+        //System.out.println(NombreProyecto+"***********");
+    }
+
+    public void setResultado(ArrayList res){
+        this.listap=res;
+    }
+
+
+    /*--------------------------------Lexer----------------------------------------*/
+    public String[] getLexStatus(){
+        return lexer2.getStatus();
+    }
+
+    public Integer[] getLexDetails() throws Exception{
+        System.out.println("getdetalles:"+lexer2.getDetails());
+        return lexer2.getDetails();
+    }
+
+    
+:}
+
+action code{:
+
+    public ArrayList listH = new ArrayList();
+    public ArrayList listP = new ArrayList();
+    public ArrayList listK = new ArrayList();
+    public ArrayList listD = new ArrayList();
+
+    public void addListaH (ArrayList arr){
+        listH.add(arr);
+    }
+    public ArrayList getListaH (){
+        //System.out.println(listahac+"--getListaH");
+        return listH;
+    }
+    public void clearListaH (){
+        listH.clear();
+    }
+
+    /*------------------------------------------*/
+    public void addListaK (ArrayList arr){
+        listK.add(arr);
+    }
+
+    public ArrayList getListaK (){
+        //System.out.println(listahac+"--getListaH");
+        return listK;
+    }
+    public void clearListaK (){
+        listK.clear();
+    }
+
+
+    /*------------------------------------------*/
+
+    public void addListaP (ArrayList arrp){
+        listP.add(arrp);
+    }
+    public ArrayList getListaP (){
+        //System.out.println(listapac+"--getListaP");
+        return listP;
+    }
+    public void clearListap (){
+        listP.clear();
+    }
+
+    /*------------------------------------------*/
+
+    public void addListaD (ArrayList arrp){
+        listD.add(arrp);
+    }
+    public ArrayList getListaD (){
+        //System.out.println(listapac+"--getListaP");
+        return listD;
+    }
+    public void clearListaD (){
+        listD.clear();
+    }
+:}
+
+terminal colon, llaveA, llaveC, coma, dcomilla,mas,menos,por,div; 
+
+terminal String word;
+
+terminal Double num;
+
+non terminal Double Operaciones, Second, Valor;
+
+non terminal ArrayList S, ListaP, Objeto, Atributo, ListaH, Camara, Plano, OA;
+
+non terminal NumLetra;
+
+start with S;
+S   ::= llaveA Atributo:atr4 coma Camara:ca llaveC {: 
+                                                        parser.NombreProyecto.add(atr4);
+                                                        addListaK(ca);
+                                                        RESULT=getListaK();
+                                                        parser.setResultado((ArrayList) RESULT);
+                                                        System.out.println(RESULT+"--\n");
+                                                    :}
+        | error {: System.out.println("Error al leer Nombre de proyecto"); :};
+
+Camara  ::= dcomilla NumLetra:nc dcomilla colon llaveA ListaH:lh4 llaveC coma Plano:pl  {: 
+                                                                                            addListaK(pl);
+                                                                                            ArrayList obK2 = new ArrayList();
+                                                                                            obK2.add(0,String.valueOf(nc));
+                                                                                            obK2.add(1,String.valueOf(lh4));
+                                                                                            RESULT=obK2;
+                                                                                            System.out.println("\t \t"+RESULT);
+                                                                                        :}
+        | error {: System.out.println("Error al leer Camara"); :};
+
+Plano   ::= dcomilla NumLetra:np dcomilla colon llaveA ListaP:lp2 llaveC {: 
+                                                                                            ArrayList obK = new ArrayList();
+                                                                                            obK.add(0,String.valueOf(np));
+                                                                                            obK.add(1,String.valueOf(lp2));
+                                                                                            RESULT=obK;
+                                                                                            //System.out.println(lp2);
+                                                                                        :}
+        | error {: System.out.println("Error al leer Camara"); :};
+
+ListaH  ::= Atributo:atr3 coma ListaH  {:
+                                            addListaH(atr3);
+                                            RESULT=getListaH();
+                                        :}
+        |   Atributo:atr2  {:
+                                addListaH(atr2);
+                                RESULT=getListaH();
+                            :};
+
+ListaP  ::= OA:oa1 coma ListaP  {:
+                                    //System.out.println(getListaP()+"-\n");
+                                    addListaD(oa1);
+                                    RESULT=getListaD();
+                                :}
+        | OA:oa {:
+                    //System.out.println(getListaP()+"\n");
+                    addListaD(oa);
+                    RESULT=getListaD();
+                    
+                :};
+
+OA      ::= Atributo:atr {:
+                            RESULT=atr;
+                        :}
+        | Objeto:ob {:
+                    RESULT=ob;
+                :}; 
+
+
+Atributo    ::= dcomilla NumLetra:na dcomilla colon dcomilla NumLetra:va dcomilla 
+                    {:   
+                        ArrayList atributo = new ArrayList();
+                        atributo.add(0,String.valueOf(na));
+                        atributo.add(1,String.valueOf(va));
+                        RESULT=atributo;
+                        //System.out.println(RESULT);
+                    :};
+
+Objeto  ::=  dcomilla NumLetra:no dcomilla colon llaveA ListaP:lp llaveC 
+                    {: 
+                        ArrayList<String> objto = new ArrayList<String>();
+                        objto.add(0,String.valueOf(no));
+                        objto.add(1,String.valueOf(getListaH()));
+                        addListaP(objto);
+                        RESULT=objto;
+
+                        
+                        //System.out.println("\t\t"+RESULT+"\n");
+                    :};
+
+NumLetra::= word:w {: RESULT = new String(w);:}
+        | Operaciones:o {: RESULT = o;:};
+Operaciones ::= Operaciones:o mas Second:s {: RESULT = o + s; :}
+            | Operaciones:o menos Second:s {: RESULT = o - s; :}
+            | Second:s {: RESULT = s; :};
+Second  ::= Second:s por Valor:v {: RESULT = s * v; :}
+        | Second:s  div Valor:v {: RESULT = s / v; :}
+        | Valor:v {: RESULT = v; :};
+Valor   ::= num:v {: RESULT = new Double(v);:};
