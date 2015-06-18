@@ -38,6 +38,7 @@ import com.sun.j3d.utils.image.TextureLoader;
 
 public class Design3D {
     private TransformGroup plano_base = new TransformGroup();
+    TransformGroup objetos = new TransformGroup();
     
     /*  -- Clase principal --
      *  Genera la ventana de la grafica, agregando los elementos que se transfieren 
@@ -56,6 +57,7 @@ public class Design3D {
 
         universe.getViewingPlatform().setNominalViewingTransform();
         /* - Se obtienen los elementos - */
+        //TransformGroup an_sin = getArrElement(obj);
         TransformGroup an_sin = getArrElement(obj);
         escenarioCentral=plano_base;
 
@@ -86,15 +88,15 @@ public class Design3D {
     }
    
     
-    private Boolean ListOpc(String name){
+    private void ListOpc(String name, ArrayList arr){
         if (name.equals("proyecto")){
-            
+            System.out.println(arr+"\n");
         }else if (name.equals("camara")){
-            
+            objetos.addChild(camara((ArrayList)arr));
         }else if (name.equals("plano")){
             
         }else if (name.equals("objetos")){
-            
+            objetos.addChild(objetos(arr));
         }else if (name.equals("columna")){
             
         }else if (name.equals("pared")){
@@ -108,13 +110,25 @@ public class Design3D {
         }else if (name.equals("vista")){
             
         }
+    }
+    
+    public void recursiveArr(ArrayList arr){
+        Iterator ite = arr.iterator();
+        while(ite.hasNext()){
+            ArrayList objto = (ArrayList)ite.next();
+            if(objto.get(0) instanceof ArrayList){
+                recursiveArr((ArrayList)objto.get(1));
+            }else{
+                ListOpc(objto.get(0).toString(),(ArrayList)objto.get(1));
+            }
+        }
         
     }
     
     
     
     public TransformGroup getArrElement(ArrayList obj) throws Exception{
-        TransformGroup objetos = new TransformGroup();
+        //TransformGroup objetos = new TransformGroup();
         Iterator ite = obj.iterator();
         while(ite.hasNext()){
             ArrayList objto = (ArrayList)ite.next();
