@@ -47,7 +47,7 @@ public class Columna {
         Iterator ite = arr.iterator();
         while(ite.hasNext()){
             ArrayList objto = (ArrayList)ite.next();
-            
+            System.out.println(objto);
             if (objto.get(0).equals("alto")){
                 alto=Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("forma")){

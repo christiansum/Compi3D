@@ -72,7 +72,7 @@ public class Pared {
             }else {   
                 ventana= this.ventana((ArrayList)objto.get(1));
             }
-            System.out.println(objto.get(0)+":"+objto.get(1));
+            //System.out.println(objto.get(0)+":"+objto.get(1));
         }
         
         if (orientacion.equals("ejeX")){
@@ -115,9 +115,9 @@ public class Pared {
         String orientacion = "ejeY";
         float posX=0, posY=0, posZ=0;      
 
-        Appearance vidrio = textu.textura(getClass().getResource("/Imagenes/window/ventana.png"));
-        Appearance madera = textu.textura(getClass().getResource("/Imagenes/window/madera.jpg"));
-        Appearance polarizado = textu.textura(getClass().getResource("/Imagenes/window/polarizado.jpg"));
+        Appearance vidrio = textu.textura(getClass().getResource("/img/ventana.png"));
+        Appearance madera = textu.textura(getClass().getResource("/img/madera.jpg"));
+        Appearance polarizado = textu.textura(getClass().getResource("/img/polarizado.jpg"));
   
         Box window;
         TransformGroup modelo = new TransformGroup(); //groupVentana

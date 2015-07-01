@@ -35,6 +35,9 @@ import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.Box;
 import com.sun.j3d.utils.geometry.Primitive;
 import com.sun.j3d.utils.image.TextureLoader;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+import javax.vecmath.Vector3f;
 
 
 public class Design3D {
@@ -79,6 +82,13 @@ public class Design3D {
         
         /* - Se agregan los elementos obtenidos - */
         /* - an_sin = Analizador Sintactico - */
+        
+        Transform3D e3d = new Transform3D();
+        Vector3d v =  new  Vector3d (0f, 0f, +2.0f);
+        e3d.set(v);
+        escenarioCentral.setTransform(e3d);
+               
+        
         escenarioCentral.addChild(an_sin);
         group.addChild(escenarioCentral);
         universe.addBranchGraph(group);
@@ -112,8 +122,9 @@ public class Design3D {
             Iterator ite = OpcPla.iterator();
             while(ite.hasNext()){              
                 ArrayList obPla = (ArrayList)ite.next();
-                if (obPla.get(1).equals("objetos")){ 
-                    recursiveArr((ArrayList)obPla.get(0), ob);
+                if (obPla.get(0).equals("objetos")){ 
+                    recursiveArr((ArrayList)obPla.get(1), 1);
+                    //System.out.println(obPla.get(1));
                 }
             }
             objetos.addChild(map.plano((ArrayList)arr));
@@ -122,26 +133,26 @@ public class Design3D {
             /* Sirve para que comienzce a analizar objeto por objeto
             * Se envia ob=1 para que evalue objetos ahora
             */
-            recursiveArr((ArrayList)arr,1);
+     
         }else if(ob==1){ //Sin importar que arr tenga, evalua si es ob=1 para analizar objetos de diseño
             ArrayList OpcObj = (ArrayList)arr;
             Iterator ite = OpcObj.iterator();
             while(ite.hasNext()){              
                 ArrayList objto = (ArrayList)ite.next();          
                 if (objto.get(1).equals("columna")){ // Evalua si es camara para crear elemento Columna
-                    objetos.addChild(col.columna((ArrayList)arr));
+                    objetos.addChild(col.columna((ArrayList)arr)); 
                 }else if (objto.get(1).equals("pared")){ //Evalua si es pared para crear elemento Pared
                     objetos.addChild(wall.pared((ArrayList)arr));
                 }else if (objto.get(1).equals("puerta")){ //Evalua si es techo para crear elemento Techo
                     objetos.addChild(door.puerta((ArrayList)arr));
                 }else if (objto.get(1).equals("techo")){ //Evalua si es techo para crear elemento Techo
-                    objetos.addChild(ceiling.techo((ArrayList)arr));
+                    //objetos.addChild(ceiling.techo((ArrayList)arr));
                 }else if (objto.get(1).equals("arbol")){ //Evalua si es arbol para crear elemento Arbol
-                    objetos.addChild(tree.arbol((ArrayList)arr));
+                   // objetos.addChild(tree.arbol((ArrayList)arr));
                 }else if (objto.get(1).equals("persona")){ //Evalua si es persona para crear elemento Persona
                     objetos.addChild(person.persona((ArrayList)arr));
                 }else if (objto.get(1).equals("vista")){ //Evalua si es vista para crear configuracion de Vista
-                    objetos.addChild(view.vista((ArrayList)arr));
+                    //objetos.addChild(view.vista((ArrayList)arr));
                 }
                 
             }
