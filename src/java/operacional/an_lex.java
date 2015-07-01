@@ -251,19 +251,25 @@ public class an_lex implements java_cup.runtime.Scanner {
 		/* 14 */ YY_NO_ANCHOR,
 		/* 15 */ YY_NO_ANCHOR,
 		/* 16 */ YY_NO_ANCHOR,
-		/* 17 */ YY_NO_ANCHOR,
-		/* 18 */ YY_NO_ANCHOR
+		/* 17 */ YY_NOT_ACCEPT,
+		/* 18 */ YY_NO_ANCHOR,
+		/* 19 */ YY_NOT_ACCEPT,
+		/* 20 */ YY_NO_ANCHOR,
+		/* 21 */ YY_NO_ANCHOR,
+		/* 22 */ YY_NO_ANCHOR,
+		/* 23 */ YY_NO_ANCHOR
 	};
 	private int yy_cmap[] = unpackFromString(1,130,
-"16:9,13,14,16,13:2,16:18,15,16,12,16:7,11,8,7,9,2,10,1:10,4,16:6,3:26,16:4," +
-"3,16,3:26,5,16,6,16:2,0:2")[0];
+"16:9,13,14,16,13:2,16:18,15,16,12,16:7,11,2,9,1,4,10,3:10,6,16:6,5:26,16:4," +
+"5,16,5:26,7,16,8,16:2,0:2")[0];
 
-	private int yy_rmap[] = unpackFromString(1,19,
-"0,1,2,3,1:13,4,5")[0];
+	private int yy_rmap[] = unpackFromString(1,24,
+"0,1,2,3,4,5,1:11,2,6,3,7,8,9,10")[0];
 
-	private int yy_nxt[][] = unpackFromString(6,17,
-"1,2,3:2,4,5,6,7,8,9,10,11,12,13,14,15,16,-1:18,2,18,3,-1:14,3:3,-1:14,17,3:" +
-"2,-1:14,17,18,3,-1:13");
+	private int yy_nxt[][] = unpackFromString(11,17,
+"1,2,3,4,5:2,6,7,8,9,10,11,12,13,14,15,16,-1:18,17,19,18,-1:15,19,18,-1:16,4" +
+",22,5,-1:14,5:3,-1:14,18,23,-1:15,20,5:2,-1:14,21,-1:16,20,22,5,-1:14,21,23" +
+",-1:12");
 
 	public java_cup.runtime.Symbol next_token ()
 		throws java.io.IOException {
@@ -317,73 +323,73 @@ public class an_lex implements java_cup.runtime.Scanner {
 						break;
 					case 2:
 						{	
-			putDetails(2);
 			//System.out.println(yytext());
-			//putStatus("Numero: "+new Double(Double.parseDouble(yytext()))); 
-			return new Symbol(sym.num, new Double(Double.parseDouble(yytext())));
+			putDetails(4);
+			//putStatus("Operador Aritmetico: "+ new String(yytext()));
+			return new Symbol(sym.menos, new String(yytext()));
 		}
 					case -3:
 						break;
 					case 3:
 						{	
 			//System.out.println(yytext());
-			putDetails(1);
-			//putStatus("Identificador: "+ new String(yytext())); 
-			return new Symbol(sym.word, yytext());
+			putDetails(4);
+			//putStatus("Operador Aritmetico: "+ new String(yytext()));
+			return new Symbol(sym.mas, new String(yytext()));
 		}
 					case -4:
 						break;
 					case 4:
+						{	
+			putDetails(2);
+			//System.out.println(yytext());
+			//putStatus("Numero: "+new Double(Double.parseDouble(yytext()))); 
+			return new Symbol(sym.num, new Double(Double.parseDouble(yytext())));
+		}
+					case -5:
+						break;
+					case 5:
+						{	
+			//System.out.println(yytext());
+			putDetails(1);
+			//putStatus("Identificador: "+ new String(yytext())); 
+			return new Symbol(sym.word, yytext());
+		}
+					case -6:
+						break;
+					case 6:
 						{	
 			//System.out.println(yytext());
 			putDetails(0);
 			//putStatus("Signo: "+ new String(yytext()));
 			return new Symbol(sym.colon, new String(yytext()));
 		}
-					case -5:
+					case -7:
 						break;
-					case 5:
+					case 7:
 						{	
 				//System.out.println(yytext());
 				putDetails(0);
 				//putStatus("Signo: "+ new String(yytext()));
 				return new Symbol(sym.llaveA, new String(yytext()));
 			}
-					case -6:
+					case -8:
 						break;
-					case 6:
+					case 8:
 						{	
 				//System.out.println(yytext());
 				putDetails(0);
 				//putStatus("Signo: "+ new String(yytext()));
 				return new Symbol(sym.llaveC, new String(yytext()));
 			}
-					case -7:
-						break;
-					case 7:
-						{	
-			//System.out.println(yytext());
-			putDetails(0);
-			//putStatus("Signo: "+ new String(yytext()));
-			return new Symbol(sym.coma, new String(yytext()));
-		}
-					case -8:
-						break;
-					case 8:
-						{	
-			//System.out.println(yytext());
-			putDetails(4);
-			//putStatus("Operador Aritmetico: "+ new String(yytext()));
-			return new Symbol(sym.mas, new String(yytext()));
-		}
 					case -9:
 						break;
 					case 9:
 						{	
 			//System.out.println(yytext());
-			putDetails(4);
-			//putStatus("Operador Aritmetico: "+ new String(yytext()));
-			return new Symbol(sym.menos, new String(yytext()));
+			putDetails(0);
+			//putStatus("Signo: "+ new String(yytext()));
+			return new Symbol(sym.coma, new String(yytext()));
 		}
 					case -10:
 						break;
@@ -435,7 +441,7 @@ public class an_lex implements java_cup.runtime.Scanner {
 	}
 					case -17:
 						break;
-					case 17:
+					case 18:
 						{	
 			putDetails(2);
 			//System.out.println(yytext());
@@ -444,7 +450,7 @@ public class an_lex implements java_cup.runtime.Scanner {
 		}
 					case -18:
 						break;
-					case 18:
+					case 20:
 						{	
 			putDetails(2);
 			//System.out.println(yytext());
@@ -452,6 +458,33 @@ public class an_lex implements java_cup.runtime.Scanner {
 			return new Symbol(sym.num, new Double(Double.parseDouble(yytext())));
 		}
 					case -19:
+						break;
+					case 21:
+						{	
+			putDetails(2);
+			//System.out.println(yytext());
+			//putStatus("Numero: "+new Double(Double.parseDouble(yytext()))); 
+			return new Symbol(sym.num, new Double(Double.parseDouble(yytext())));
+		}
+					case -20:
+						break;
+					case 22:
+						{	
+			putDetails(2);
+			//System.out.println(yytext());
+			//putStatus("Numero: "+new Double(Double.parseDouble(yytext()))); 
+			return new Symbol(sym.num, new Double(Double.parseDouble(yytext())));
+		}
+					case -21:
+						break;
+					case 23:
+						{	
+			putDetails(2);
+			//System.out.println(yytext());
+			//putStatus("Numero: "+new Double(Double.parseDouble(yytext()))); 
+			return new Symbol(sym.num, new Double(Double.parseDouble(yytext())));
+		}
+					case -22:
 						break;
 					default:
 						yy_error(YY_E_INTERNAL,false);

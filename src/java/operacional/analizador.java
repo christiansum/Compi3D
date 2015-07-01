@@ -9,6 +9,7 @@
  * Guatemala 2015
  */
 package operacional;
+import D3.*; //import the package D3
 import java.io.*;
 import java.util.*;
 import java.lang.*;

@@ -13,7 +13,7 @@
     </head>
     <body>
         <form action="analizador.jsp" id="analizar" method="get">
-            <textarea name="gramatica" id='gramatica'  maxlength="500000000000000000000000000000000" rows="100" cols="75" ></textarea><br></br>
+            <textarea name="gramatica" id='gramatica'  maxlength="500000000000000000000000000000000" rows="25" cols="75" ></textarea><br></br>
             <input type="submit" id="analiza" value="Analizar"/>
         </form>
 

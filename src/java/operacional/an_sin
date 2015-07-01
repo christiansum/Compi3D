@@ -100,6 +100,7 @@ ObAt  ::=  dcomilla NumLetra:nameO dcomilla colon llaveA ListaP:valO llaveC {:
 NumLetra::= word:w {:   RESULT = w.toString();   :}
 
         | Operaciones:o {: RESULT = o;:};
+
 Operaciones ::= Operaciones:o mas Second:s {: RESULT = o + s; :}
             | Operaciones:o menos Second:s {: RESULT = o - s; :}
             | Second:s {: RESULT = s; :};

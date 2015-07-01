@@ -46,7 +46,7 @@ import java.lang.*;
 	return null;
 %eofval}
 
-num = ([0-9]+(\.)*[0-9]*)
+num = (\-)*(\+)*([0-9]+(\.)*[0-9]*)
 word = [a-zA-Z0-9_.]+
 colon=":"
 llaveA="{"
