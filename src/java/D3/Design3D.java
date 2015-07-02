@@ -40,13 +40,16 @@ import javax.media.j3d.TransformGroup;
 import javax.vecmath.Vector3f;
 
 
+
 public class Design3D {
     private final TransformGroup plano_base;
     private final TransformGroup objetos;
+    private Transform3D e3dGlobal ;
 
     public Design3D() {
         this.objetos = new TransformGroup();
         this.plano_base = new TransformGroup();
+        this.e3dGlobal =new Transform3D();
     }
     
     /*  -- Clase principal --
@@ -68,7 +71,7 @@ public class Design3D {
         /* - Se obtienen los elementos - */
         recursiveArr(obj,0); // Se ejecuta la funcion para recorrer el ArrayList
         TransformGroup an_sin = objetos; //Se inserta variable global de todos los objetos
-        escenarioCentral=plano_base; //Se inserta variable global para el Plano
+        escenarioCentral = plano_base; //Se inserta variable global para el Plano
 
         escenarioCentral.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
         escenarioCentral.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
@@ -83,11 +86,14 @@ public class Design3D {
         /* - Se agregan los elementos obtenidos - */
         /* - an_sin = Analizador Sintactico - */
         
-        Transform3D e3d = new Transform3D();
-        Vector3d v =  new  Vector3d (0f, 0f, +2.0f);
-        e3d.set(v);
+        Transform3D e3d = e3dGlobal;
+        
+        
+        /*Vector3d v =  new  Vector3d (0, -15, -120);
+            e3dGlobal.setTranslation(v);
+*/
         escenarioCentral.setTransform(e3d);
-               
+        universe.getViewer().getView().setBackClipDistance(1000);
         
         escenarioCentral.addChild(an_sin);
         group.addChild(escenarioCentral);
@@ -113,7 +119,11 @@ public class Design3D {
         
         if (name.equals("proyecto")){ // Confirma si es el nombre del proyecto - [proyecto, nombre_del_proyecto]
         }else if (name.equals("camara")){ // Confirma si es la camara donde se visualiza el plano - [camara, [ArrayList_objetos_camara]]
-            objetos.addChild(cam.camara((ArrayList)arr)); //Agrega elemento a los objetos
+            Vector3d v =  new  Vector3d (0.0f, -15.0f, -120.0f);
+            e3dGlobal.setTranslation(v);
+            //e3dGlobal.setTranslation(cam.base((ArrayList)arr)); //Genera la base donde se visualiza el objeto
+            
+            e3dGlobal.lookAt((Point3d)cam.ojo((ArrayList)arr),new Point3d(0f,0f,0f),new Vector3d(0f,1f,0f));
         }else if (name.equals("plano")){ // Confirma si es el plano  - [plano,[dimX,numero],[dimY,numero],[objetos,[ArrayList_objetos_diseño]]]
             /*
             * De todos los elementos que tenga Plano evalua si existe uno que se llame "Objetos" y lo ingresa a recursividad
@@ -152,7 +162,7 @@ public class Design3D {
                 }else if (objto.get(1).equals("persona")){ //Evalua si es persona para crear elemento Persona
                     objetos.addChild(person.persona((ArrayList)arr));
                 }else if (objto.get(1).equals("vista")){ //Evalua si es vista para crear configuracion de Vista
-                    //objetos.addChild(view.vista((ArrayList)arr));
+                    e3dGlobal.lookAt(view.vista((ArrayList)arr),new Point3d(0f,0f,0f),new Vector3d(0f,1f,0f));
                 }
                 
             }

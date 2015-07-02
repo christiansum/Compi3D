@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
+import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 
 /**
  * @author Christian Sum 
@@ -22,16 +24,32 @@ import javax.media.j3d.TransformGroup;
  * Guatemala 2015
  */
 public class Vista {
-    public TransformGroup vista(ArrayList arr){
-        Transform3D t3d = new Transform3D();
-        TransformGroup modelo = new TransformGroup(t3d);
+    private String view = "";
+    
+    public Point3d vista(ArrayList arr){
+        Point3d p = new Point3d();
         Iterator ite = arr.iterator();
         while(ite.hasNext()){
             ArrayList objto = (ArrayList)ite.next();
             //System.out.println(objto);
-            if (objto.get(1).equals("columna")){}
+            if (objto.get(0).equals("camara")){
+                view=(String)objto.get(1);
+            }
         }
-           
-        return modelo;
+        
+        if(view.equals("frontal")){
+            p = new Point3d(0f,0f,10f); // front
+        }else if(view.equals("lateralIzquierda")){
+            p = new Point3d(20f,0f,0f); // west
+        }else if(view.equals("lateralDerecha")){
+            p = new Point3d(-20f,0f,0f); // east
+        }else if(view.equals("aerea")){
+            p = new Point3d(0f,10f,1f); // aerea
+        }else if(view.equals("atras")){
+            p = new Point3d(0f,0f,-10f); //back 
+        }else{
+            p = new Point3d(0f,0f,10f); // front
+        }
+        return p;
     }
 }
