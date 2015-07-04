@@ -2,6 +2,7 @@ package operacional;
 import java_cup.runtime.Symbol;
 import java.io.*;
 import java.lang.*;
+import java.util.ArrayList;
 
 
 public class an_lex implements java_cup.runtime.Scanner {
@@ -18,6 +19,7 @@ public class an_lex implements java_cup.runtime.Scanner {
 	private String[] estados;
 	private Integer detalles[] = new Integer[]{0,0,0,0,0};
 	private Integer signo=0, id=0, numero=0, linea=0, opar=0, i=0;
+	private ArrayList errores = new ArrayList();
 	private void putStatus(String str){
     	int i = estados.length;
     	estados[i++]=str;
@@ -32,6 +34,9 @@ public class an_lex implements java_cup.runtime.Scanner {
 		*	3	-	Linea
 		*	4	-	Operador Aritmetico
     	*/
+  	}
+  	public ArrayList getErrors(){
+  		return errores;
   	}
   	public String[] getStatus(){
   		return estados;
@@ -267,9 +272,9 @@ public class an_lex implements java_cup.runtime.Scanner {
 "0,1,2,3,4,5,1:11,2,6,3,7,8,9,10")[0];
 
 	private int yy_nxt[][] = unpackFromString(11,17,
-"1,2,3,4,5:2,6,7,8,9,10,11,12,13,14,15,16,-1:18,17,19,18,-1:15,19,18,-1:16,4" +
-",22,5,-1:14,5:3,-1:14,18,23,-1:15,20,5:2,-1:14,21,-1:16,20,22,5,-1:14,21,23" +
-",-1:12");
+"1,2,3,4,5:2,6,7,8,9,10,11,12,13,14,15,16,-1:18,17,19,4,5:2,-1:13,19,18,-1:1" +
+"6,4,22,5,-1:14,5:3,-1:14,18,23,-1:15,20,5:2,-1:14,21,-1:16,20,22,5,-1:14,21" +
+",23,-1:12");
 
 	public java_cup.runtime.Symbol next_token ()
 		throws java.io.IOException {
@@ -437,7 +442,7 @@ public class an_lex implements java_cup.runtime.Scanner {
 						break;
 					case 16:
 						{	
-		//putStatus("Error Lexico: " + yytext());
+		errores.add("No se reconoce el Simbolo: " + yytext());
 	}
 					case -17:
 						break;

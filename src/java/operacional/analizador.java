@@ -16,8 +16,13 @@ import java.lang.*;
 
 public class analizador {
     public parser instancia = new parser();
-    public void procesar(String ciudad) throws Exception {
-        instancia.cargarString(ciudad);
+    private ArrayList errores = new ArrayList();
+    
+    public Boolean procesar(String ciudad) throws Exception {
+        if(instancia.cargarString(ciudad)){
+            return true;
+        }
+        return false;
     } 
     public Integer[] getDetLex() throws Exception{
         return instancia.getLexDetails();
@@ -28,9 +33,23 @@ public class analizador {
     }
     
     public void crear()throws Exception {
-        Design3D diseno= new Design3D();
-        diseno.Design3D((ArrayList)instancia.getObjto());
+        try{
+            Design3D diseno= new Design3D();
+            diseno.Design3D((ArrayList)instancia.getObjto());
+            errores = diseno.getError();
+        }catch (Exception e){
+            setErrors("Critico: No fue posible generar el universo: Method Desig3D");
+        }
     }
-    public void reconocimiento(ArrayList col){
+    
+    public ArrayList getErrorSem(){
+        return errores;
     }
+    public ArrayList getErrorSin(){
+        return instancia.getError();
+    }
+    public void setErrors(Object e){
+        errores.add(e);
+    }
+
 }

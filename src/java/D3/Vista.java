@@ -24,32 +24,45 @@ import javax.vecmath.Vector3d;
  * Guatemala 2015
  */
 public class Vista {
-    private String view = "";
+    private ArrayList errores = new ArrayList();
+    
     
     public Point3d vista(ArrayList arr){
+        String view = "";
         Point3d p = new Point3d();
+        Boolean camaraB=false;
         Iterator ite = arr.iterator();
         while(ite.hasNext()){
             ArrayList objto = (ArrayList)ite.next();
             //System.out.println(objto);
             if (objto.get(0).equals("camara")){
+                camaraB=true;
                 view=(String)objto.get(1);
+            }else if(camaraB==false){
+                    setErrors("Alerta: Lista de propiedades vacia.");
+            }else{
+                setErrors("Alerta: No se reconoce la propiedad: '"+objto.get(0)+"' Valor: "+objto); //Error Sintactico
             }
         }
-        
         if(view.equals("frontal")){
-            p = new Point3d(0f,0f,10f); // front
-        }else if(view.equals("lateralIzquierda")){
-            p = new Point3d(20f,0f,0f); // west
+            p = new Point3d(20f,10f,10f); // front
         }else if(view.equals("lateralDerecha")){
-            p = new Point3d(-20f,0f,0f); // east
+            p = new Point3d(30f,10f,0f); // west
+        }else if(view.equals("lateralIzquierda")){
+            p = new Point3d(-40f,10f,0f); // east
         }else if(view.equals("aerea")){
-            p = new Point3d(0f,10f,1f); // aerea
+            p = new Point3d(20f,20f,1f); // aerea
         }else if(view.equals("atras")){
-            p = new Point3d(0f,0f,-10f); //back 
+            p = new Point3d(20f,10f,-10f); //back 
         }else{
-            p = new Point3d(0f,0f,10f); // front
+            p = new Point3d(20f,10f,10f); // front
         }
         return p;
+    }
+    public ArrayList getError(){
+        return errores;
+    }
+    public void setErrors(String e){
+        errores.add(e);
     }
 }

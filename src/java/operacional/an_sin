@@ -12,21 +12,25 @@ parser code{:
     ArrayList listap = new ArrayList();
     ArrayList NombreProyecto = new ArrayList();
     /*------------------------------Parser---------------------------------------*/
-    public void syntax_error(Symbol st){
-        report_error("Error Sintactico",null);
-    }
-
+   
     public static void cargarFile(String archivo) throws Exception{
         new parser(new an_lex(new FileInputStream(archivo))).parse();
     }
 
-    public void cargarString(String texto) throws Exception{
-        an_lex lexer = new an_lex(new StringReader(texto));
-        parser parser_string = new parser(lexer);
-        parser_string.parse();
-        this.listap = parser_string.listap;
-        this.NombreProyecto = parser_string.NombreProyecto;
-        lexer2=lexer;
+    public Boolean cargarString(String texto) throws Exception{
+        try{
+            an_lex lexer = new an_lex(new StringReader(texto));
+            parser parser_string = new parser(lexer);
+            parser_string.parse();
+            this.listap = parser_string.listap;
+            this.errores = parser_string.errores;
+            this.NombreProyecto = parser_string.NombreProyecto;
+            lexer2=lexer;
+            return true;
+        }catch(Exception e){
+            setError("Critico: Error en la lectura del texto.");
+            return false;
+        }      
     }
     public ArrayList getObjto(){
         return this.listap;
@@ -36,7 +40,12 @@ parser code{:
         this.listap=res;
     }
 
-
+    public void setError(Object o){
+        errores.add(o);
+    }
+    public ArrayList getError(){
+        return errores;
+    }
     /*--------------------------------Lexer----------------------------------------*/
     public String[] getLexStatus(){
         return lexer2.getStatus();
@@ -73,7 +82,8 @@ S   ::= llaveA ObAt:atr coma ListaP:lista llaveC {:
                                                         RESULT=fin;
                                                         parser.setResultado(RESULT);
                                                         //System.out.println(RESULT+"\n");
-                                                    :};
+                                                    :}
+        | error:ee {: parser.setError("Critico: No se reconoce la gramatica en las variables proyecto, camara o plano, verificar el texto.");:};
 ListaP  ::= ListaP:lp coma ObAt:ob2 {: 
                                             lp.add(ob2);
                                             RESULT=lp;
@@ -95,11 +105,13 @@ ObAt  ::=  dcomilla NumLetra:nameO dcomilla colon llaveA ListaP:valO llaveC {:
                                                                                         atri.add(nameA);
                                                                                         atri.add(valA);  
                                                                                         RESULT =  atri;
-                                                                                    :};
+                                                                                    :}
+        | error:ee {: parser.setError("Critico: No se reconoce la gramatica en la lectura de objetos ");:};
 
 NumLetra::= word:w {:   RESULT = w.toString();   :}
 
-        | Operaciones:o {: RESULT = o;:};
+        | Operaciones:o {: RESULT = o;:}
+        | error:ee {: parser.setError("Critico: No se reconoce la gramatica en leer valores o propiedades ");:};
 
 Operaciones ::= Operaciones:o mas Second:s {: RESULT = o + s; :}
             | Operaciones:o menos Second:s {: RESULT = o - s; :}

@@ -26,16 +26,20 @@ import javax.vecmath.Vector3f;
  * Guatemala 2015
  */
 public class Pared {
-    Textura textu= new Textura();
+    private ArrayList errores = new ArrayList();
+   Textura textu= new Textura();
     
     public TransformGroup pared(ArrayList arr){
- 
+        
         float largo= 0;
         float alto=0;
         float grosor =0.1f;    
         String orientacion="ejeX";
         String texture="block";
         float posX=0, posY=0, posZ=0;
+        Boolean largoB=false, altoB=false, grosorB=false, orientacionB=false,
+                textureB=false,posXB=false, posYB=false, posZB=false,
+                ventanaB=false;
         
         Appearance ladrillo = textu.textura(getClass().getResource("/img/ladrillo.jpg"));
         Appearance piedra = textu.textura(getClass().getResource("/img/paredPiedra.jpg"));
@@ -53,24 +57,44 @@ public class Pared {
             ArrayList objto = (ArrayList)ite.next();
             //System.out.println(objto)           
             
-            if (objto.get(0).equals("tipo")){
-                
-            }else if (objto.get(0).equals("alto")){
+            if (objto.get(0).equals("alto")){
+                altoB=true;
                 alto = Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("largo")){
+                largoB=true;
                 largo = Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("orientacion")){
+                orientacionB=true;
                 orientacion=objto.get(1).toString();
             }else if (objto.get(0).equals("textura")){
+                textureB=true;
                 texture=objto.get(1).toString();
             }else if (objto.get(0).equals("posX")){
+                posXB=true;
                 posX = Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("posY")){
+                posYB=true;
                 posY = Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("posZ")){
+                posZB=true;
                 posZ = Float.parseFloat(objto.get(1).toString());
-            }else {   
-                ventana= this.ventana((ArrayList)objto.get(1));
+            }else if(largoB==false && altoB==false && grosorB==false && orientacionB==false && textureB==false && posXB==false && posYB==false && posZB==false){
+                setErrors("Alerta: Lista de propiedades vacia.");
+            }else{
+                ArrayList arr2 = (ArrayList)objto.get(1);
+                Iterator ite2 = arr2.iterator();
+                while(ite2.hasNext()){
+                    ArrayList objto2 = (ArrayList)ite2.next();
+                    //System.out.println(objto)      
+                    if (objto2.get(1).equals("ventana")){
+                        ventanaB=true;
+                        ventana= this.ventana((ArrayList)objto2);
+                    }else if(ventanaB==false){
+                        setErrors("Alerta: Lista de propiedades vacia.");
+                    }else{
+                        setErrors("Alerta: No se reconoce la propiedad: '"+objto.get(0)+"' Valor: "+objto); //Error Sintactico
+                    }
+                }
             }
             //System.out.println(objto.get(0)+":"+objto.get(1));
         }
@@ -111,13 +135,12 @@ public class Pared {
         float largo=0;
         float alto=0;
         float grosor =0.01f;
-        String tipo="normal";
         String orientacion = "ejeY";
-        float posX=0, posY=0, posZ=0;      
+        float posX=0, posY=0, posZ=0;   
+        
+        Boolean largoB=false, altoB=false, orientacionB=false,posXB=false, posYB=false, posZB=false;
 
         Appearance vidrio = textu.textura(getClass().getResource("/img/ventana.png"));
-        Appearance madera = textu.textura(getClass().getResource("/img/madera.jpg"));
-        Appearance polarizado = textu.textura(getClass().getResource("/img/polarizado.jpg"));
   
         Box window;
         TransformGroup modelo = new TransformGroup(); //groupVentana
@@ -129,32 +152,32 @@ public class Pared {
         while(ite.hasNext()){
             ArrayList objto = (ArrayList)ite.next();
             //System.out.println(objto);
-            if (objto.get(0).equals("tipo")){
-                tipo=objto.get(1).toString();
-            }else if (objto.get(0).equals("alto")){
+            if (objto.get(0).equals("alto")){
+                altoB=true;
                 alto=Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("largo")){
+                largoB=true;
                 largo=Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("orientacion")){
+                orientacionB=true;
                 orientacion=objto.get(1).toString();
             }else if (objto.get(0).equals("posX")){
+                posXB=true;
                 posX=Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("posY")){
+                posYB=true;
                 posY=Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("posZ")){
+                posZB=true;
                 posZ=Float.parseFloat(objto.get(1).toString());
+            }else if(altoB==false && largoB==false && orientacionB==false && posXB==false && posYB==false && posZB==false){
+                    setErrors("Alerta: Lista de propiedades vacia.");
+            }else{
+                setErrors("Alerta: No se reconoce la propiedad: '"+objto.get(1)+"' Valor: "+objto); //Error Sintactico
             }
         }
         
         Appearance aT=vidrio;
-           
-        if (tipo.equals("normal")){
-            aT = vidrio;
-        }else if (tipo.equals("madera")){
-            aT = madera;
-        }else if (tipo.equals("polarizado")){
-            aT = polarizado;
-        }
         
         if (orientacion.equals("ejeX")){
             rotateWindow.rotX(0);
@@ -177,5 +200,11 @@ public class Pared {
         
         
         return modelo;
+    }
+    public ArrayList getError(){
+        return errores;
+    }
+    public void setErrors(String e){
+        errores.add(e);
     }
 }

@@ -26,6 +26,8 @@ import javax.vecmath.Vector3f;
  * Guatemala 2015
  */
 public class Techo {
+    private ArrayList errores = new ArrayList();
+    
     public TransformGroup techo(ArrayList arr){
         float ancho=0;
         float largo=0;
@@ -33,6 +35,9 @@ public class Techo {
         String forma="plano";
         String orientacion="ejeY";
         float posX=0,posY=0,posZ=0;
+        
+        Boolean anchoB=false, largoB=false, altoB=false, formaB=false, 
+                orientacionB=false,posXB=false,posYB=false,posZB=false;
         
         Textura textu= new Textura();
         Appearance teja = textu.textura(getClass().getResource("/img/teja.jpg"));
@@ -63,19 +68,30 @@ public class Techo {
             ArrayList objto = (ArrayList)ite.next();
             //System.out.println(objto);
             if (objto.get(0).equals("forma")){
+                formaB=true;
                 forma=objto.get(1).toString();
             }else if (objto.get(0).equals("orientacion")){
+                orientacionB=true;
                 orientacion=objto.get(1).toString();
             }else if (objto.get(0).equals("ancho")){
+                anchoB=true;
                 ancho=Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("largo")){
+                largoB=true;
                 largo=Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("alto")){
+                altoB=true;
                 alto=Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("posX")){
+                posXB=true;
                 posX=Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("posY")){
+                posYB=true;
                 posY=Float.parseFloat(objto.get(1).toString());
+            }else if(anchoB==false & largoB==false && altoB==false && formaB==false && orientacionB==false && posXB==false && posYB==false && posZB==false){
+                    setErrors("Alerta: Lista de propiedades vacia.");
+            }else{
+                setErrors("Alerta: No se reconoce la propiedad: '"+objto.get(0)+"' Valor: "+objto); //Error Sintactico
             }
         }
         
@@ -129,5 +145,11 @@ public class Techo {
             
         
         return modelo;
+    }
+    public ArrayList getError(){
+        return errores;
+    }
+    public void setErrors(String e){
+        errores.add(e);
     }
 }

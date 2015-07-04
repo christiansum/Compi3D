@@ -29,10 +29,14 @@ import javax.vecmath.Point3d;
  * Guatemala 2015
  */
 public class Plano {
+    private ArrayList errores = new ArrayList();
+    
     public TransformGroup plano(ArrayList arr){
         float dimX=20;
         //System.out.println("Si entrooo");
         float dimY=20;
+        Boolean dimXB=false,dimYB=false;
+        
         Textura textu= new Textura();
         Appearance grama = textu.textura(getClass().getResource("/img/grama.jpg"));
         
@@ -45,11 +49,16 @@ public class Plano {
             ArrayList objto = (ArrayList)ite.next();
             //System.out.println(objto);
             if (objto.get(0).equals("dimX")){
+                dimXB=true;
                 dimX = Float.parseFloat(objto.get(1).toString());
-                
             }else if (objto.get(0).equals("dimY")){
+                dimYB=true;
                 dimY = Float.parseFloat(objto.get(1).toString());
                 //System.out.println(dimY);
+            }else if(dimXB==false && dimYB==false){
+                    setErrors("Alerta: Lista de propiedades vacia.");
+            }else{
+                setErrors("Alerta: No se reconoce la propiedad: '"+objto.get(0)+"' Valor: "+objto); //Error Sintactico
             }
         }
     //elderprado9@gmail.com
@@ -60,5 +69,11 @@ public class Plano {
         modelo . addChild ( plano );
         return modelo;
         
+    }
+    public ArrayList getError(){
+        return errores;
+    }
+    public void setErrors(String e){
+        errores.add(e);
     }
 }

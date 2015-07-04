@@ -27,13 +27,18 @@ import javax.vecmath.Vector3f;
  * Guatemala 2015
  */
 public class Columna {
+    private ArrayList errores = new ArrayList();
+    
     public TransformGroup columna(ArrayList arr){
         float alto=0;
         float ancho =0.1f;
         String tipo="";
         String forma="";
         float posX=0, posY=0, posZ=0;
-    
+        Boolean altoB=false, anchoB=false, tipoB=false, formaB=false,
+                        posXB=false,posYB=false, posZB=false;
+        
+        
         Textura textu= new Textura();
         Appearance blanco = textu.textura(getClass().getResource("/img/blanco.jpg"));
     
@@ -49,15 +54,24 @@ public class Columna {
             ArrayList objto = (ArrayList)ite.next();
             //System.out.println(objto);
             if (objto.get(0).equals("alto")){
+                altoB=true;
                 alto=Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("forma")){
+                formaB=true;
                 forma=objto.get(1).toString();
             }else if (objto.get(0).equals("posX")){
+                posXB=true;
                 posX=Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("posY")){
+                posYB=true;
                 posY=Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("posZ")){
+                posZB=true;
                 posZ=Float.parseFloat(objto.get(1).toString());
+            }else if(altoB==false && anchoB==false && tipoB==false && formaB==false && posXB==false && posYB==false && posZB==false){
+                    setErrors("Alerta: Lista de propiedades vacia.");
+            }else{
+                setErrors("Alerta: No se reconoce la propiedad: '"+objto.get(0)+"' Valor: "+objto); //Error Sintactico
             }
         }
         
@@ -76,5 +90,11 @@ public class Columna {
         t3d.setTranslation(pC);
         modelo.setTransform(t3d);       
         return modelo;
+    }
+    public ArrayList getError(){
+        return errores;
+    }
+    public void setErrors(String e){
+        errores.add(e);
     }
 }
