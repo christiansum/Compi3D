@@ -29,6 +29,7 @@ import javax.vecmath.Vector3f;
 public class Columna {
     private ArrayList errores = new ArrayList();
     
+    
     public TransformGroup columna(ArrayList arr){
         float alto=0;
         float ancho =0.1f;
@@ -53,7 +54,9 @@ public class Columna {
         while(ite.hasNext()){
             ArrayList objto = (ArrayList)ite.next();
             //System.out.println(objto);
-            if (objto.get(0).equals("alto")){
+            if (objto.get(0).equals("tipo")){
+                tipoB=true;
+            }else if (objto.get(0).equals("alto")){
                 altoB=true;
                 alto=Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("forma")){
@@ -68,12 +71,14 @@ public class Columna {
             }else if (objto.get(0).equals("posZ")){
                 posZB=true;
                 posZ=Float.parseFloat(objto.get(1).toString());
-            }else if(altoB==false && anchoB==false && tipoB==false && formaB==false && posXB==false && posYB==false && posZB==false){
-                    setErrors("Alerta: Lista de propiedades vacia.");
             }else{
                 setErrors("Alerta: No se reconoce la propiedad: '"+objto.get(0)+"' Valor: "+objto); //Error Sintactico
             }
         }
+        
+        if(tipoB=false && altoB==false && formaB==false && posXB==false && posYB==false && posZB==false){
+                    setErrors("Alerta: Lista de propiedades vacia COLUMNA.");
+            }
         
         //System.out.println(forma);
         if (forma.equals("cuadrada")){

@@ -38,12 +38,13 @@ public class Vista {
             if (objto.get(0).equals("camara")){
                 camaraB=true;
                 view=(String)objto.get(1);
-            }else if(camaraB==false){
-                    setErrors("Alerta: Lista de propiedades vacia.");
-            }else{
+            }else {
                 setErrors("Alerta: No se reconoce la propiedad: '"+objto.get(0)+"' Valor: "+objto); //Error Sintactico
             }
         }
+        if(camaraB==false){
+                    setErrors("Alerta: Lista de propiedades vacia VISTA.");
+            }
         if(view.equals("frontal")){
             p = new Point3d(20f,10f,10f); // front
         }else if(view.equals("lateralDerecha")){

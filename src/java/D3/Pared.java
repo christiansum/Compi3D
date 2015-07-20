@@ -55,7 +55,7 @@ public class Pared {
         Iterator ite = arr.iterator();
         while(ite.hasNext()){
             ArrayList objto = (ArrayList)ite.next();
-            //System.out.println(objto)           
+            //System.out.println(objto);           
             
             if (objto.get(0).equals("alto")){
                 altoB=true;
@@ -78,26 +78,31 @@ public class Pared {
             }else if (objto.get(0).equals("posZ")){
                 posZB=true;
                 posZ = Float.parseFloat(objto.get(1).toString());
-            }else if(largoB==false && altoB==false && grosorB==false && orientacionB==false && textureB==false && posXB==false && posYB==false && posZB==false){
-                setErrors("Alerta: Lista de propiedades vacia.");
-            }else{
+            }else if (objto.get(0).equals("ventana1")){
+                //System.out.println(objto.get(1)+"obj---------------");
+                System.out.println(objto.get(1));   
+                    ventana= this.ventana((ArrayList)objto.get(1));
+                    modelo.addChild(ventana);
+                    
+                    
                 ArrayList arr2 = (ArrayList)objto.get(1);
                 Iterator ite2 = arr2.iterator();
                 while(ite2.hasNext()){
                     ArrayList objto2 = (ArrayList)ite2.next();
-                    //System.out.println(objto)      
-                    if (objto2.get(1).equals("ventana")){
-                        ventanaB=true;
-                        ventana= this.ventana((ArrayList)objto2);
-                    }else if(ventanaB==false){
-                        setErrors("Alerta: Lista de propiedades vacia.");
-                    }else{
-                        setErrors("Alerta: No se reconoce la propiedad: '"+objto.get(0)+"' Valor: "+objto); //Error Sintactico
-                    }
+                    
+                       
+                    
                 }
             }
             //System.out.println(objto.get(0)+":"+objto.get(1));
         }
+        
+        if(largoB==false && altoB==false && orientacionB==false && textureB==false && posXB==false && posYB==false && posZB==false){
+                //setErrors("Alerta: Lista de propiedades vacia. PARED");
+            }
+        if(ventanaB==false){
+                    //   setErrors("Alerta: Lista de propiedades vacia.");
+                    }
         
         if (orientacion.equals("ejeX")){
             rotateWall.rotX(0);
@@ -127,7 +132,7 @@ public class Pared {
         t3d.setTranslation(posWall);
         modelo.setTransform(rotateWall);
         modelo.addChild(wall);
-        modelo.addChild(ventana);
+        
         
         return modelo;
     }
@@ -138,7 +143,7 @@ public class Pared {
         String orientacion = "ejeY";
         float posX=0, posY=0, posZ=0;   
         
-        Boolean largoB=false, altoB=false, orientacionB=false,posXB=false, posYB=false, posZB=false;
+        Boolean largoB=false, altoB=false, orientacionB=false,posXB=false, posYB=false, posZB=false,tipoB=true;
 
         Appearance vidrio = textu.textura(getClass().getResource("/img/ventana.png"));
   
@@ -151,8 +156,10 @@ public class Pared {
         Iterator ite = arr.iterator();
         while(ite.hasNext()){
             ArrayList objto = (ArrayList)ite.next();
-            //System.out.println(objto);
-            if (objto.get(0).equals("alto")){
+            System.out.println(objto);
+            if (objto.get(0).equals("tipo")){
+                tipoB=true;
+            }else if (objto.get(0).equals("alto")){
                 altoB=true;
                 alto=Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("largo")){
@@ -170,13 +177,13 @@ public class Pared {
             }else if (objto.get(0).equals("posZ")){
                 posZB=true;
                 posZ=Float.parseFloat(objto.get(1).toString());
-            }else if(altoB==false && largoB==false && orientacionB==false && posXB==false && posYB==false && posZB==false){
-                    setErrors("Alerta: Lista de propiedades vacia.");
-            }else{
+            }else {
                 setErrors("Alerta: No se reconoce la propiedad: '"+objto.get(1)+"' Valor: "+objto); //Error Sintactico
             }
         }
-        
+        if(tipoB==true && altoB==false && largoB==false && orientacionB==false && posXB==false && posYB==false && posZB==false){
+                    setErrors("Alerta: Lista de propiedades vacia.");
+            }//
         Appearance aT=vidrio;
         
         if (orientacion.equals("ejeX")){

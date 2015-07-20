@@ -27,6 +27,7 @@ import javax.vecmath.Vector3f;
  */
 public class Puerta {
     private ArrayList errores = new ArrayList();
+     
     
     public TransformGroup puerta(ArrayList arr){
         float alto=0;
@@ -36,9 +37,9 @@ public class Puerta {
         String orientacion="ejeX";
         String texture="madera";
         float posX=0, posY=0, posZ=0; 
-        
         Boolean altoB=false, largoB=false, tipoB=false, orientacionB=false,
                 textureB=false,posXB=false, posYB=false, posZB=false;
+       
     
         Textura textu= new Textura();
         Appearance blanco = textu.textura(getClass().getResource("/img/blanco.jpg"));
@@ -56,7 +57,9 @@ public class Puerta {
         while(ite.hasNext()){
             ArrayList objto = (ArrayList)ite.next();
             //System.out.println(objto);
-            if (objto.get(0).equals("alto")){
+            if (objto.get(0).equals("tipo")){
+                tipoB=true;
+            }else if (objto.get(0).equals("alto")){
                 altoB=true;
                 alto=Float.parseFloat(objto.get(1).toString());
             }else if (objto.get(0).equals("largo")){
@@ -77,12 +80,13 @@ public class Puerta {
             }else if (objto.get(0).equals("posZ")){
                 posZB=true;
                 posZ=Float.parseFloat(objto.get(1).toString());
-            }else if(altoB==false && largoB==false && tipoB==false && orientacionB==false && textureB==false && posXB==false && posYB==false && posZB==false){
-                    setErrors("Alerta: Lista de propiedades vacia.");
-            }else{
+            }else {
                 setErrors("Alerta: No se reconoce la propiedad: '"+objto.get(0)+"' Valor: "+objto); //Error Sintactico
             }
         }
+        if(altoB==false && largoB==false && orientacionB==false && textureB==false && posXB==false && posYB==false && posZB==false){
+                    setErrors("Alerta: Lista de propiedades vacia PUERTA.");
+            }
         
         Appearance aT=blanco;
            

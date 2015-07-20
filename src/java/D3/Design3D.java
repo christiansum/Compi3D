@@ -127,7 +127,7 @@ public class Design3D {
             universe.addBranchGraph(group);
     
         }catch (Exception e){
-            setErrors("Critico: No fue posible generar el universo: Method Desig3D");
+            setErrors("Critico: No fue posible generar el universo: Method Desig3D"+e);
         }
     }
     /*
@@ -183,12 +183,12 @@ public class Design3D {
                     setErrors(door.getError());
                 }else if (objto.get(1).equals("techo")){ //Evalua si es techo para crear elemento Techo
                     techoB=true;
-                    //objetos.addChild(ceiling.techo((ArrayList)arr));
+                    objetos.addChild(ceiling.techo((ArrayList)arr));
                     setErrors(ceiling.getError());
                 }else if (objto.get(1).equals("arbol")){ //Evalua si es arbol para crear elemento Arbol
                     arbolB=true;
-                   // objetos.addChild(tree.arbol((ArrayList)arr));
-                    //setErrors(person.getError());
+                    objetos.addChild(tree.arbol((ArrayList)arr));
+                    setErrors(person.getError());
                 }else if (objto.get(1).equals("persona")){ //Evalua si es persona para crear elemento Persona
                     personaB=true;
                     objetos.addChild(person.persona((ArrayList)arr));
@@ -197,17 +197,18 @@ public class Design3D {
                     vistaB=true;
                     p = view.vista((ArrayList)arr);
                     setErrors(view.getError());
-                }else if(columnaB==false && paredB==false && puertaB==false && techoB==false && arbolB==false && personaB==false && vistaB==false){
-                    setErrors("Alerta: Lista de objetos vacia.");
-                }else{
-                    setErrors("Alerta: No se reconoce la propiedad: '"+objto.get(1)+"' Valor: "+objto); //Error Sintactico
+                }else {
+                    //setErrors("Alerta: No se reconoce la propiedad: '"+objto.get(1)+"' Valor: "+objto); //Error Sintactico
                 }
                 
             }
+            
         }else if(proyectoB==false || camaraB==false || planoB==false || objetosB==false){
             setErrors("Critico: No Existen los elementos 'proyecto', 'camara' y 'plano'. Por favor verifique el texto ingresado."+arr); //Error Sintactico
-        }else{
-            setErrors("Alerta: No se reconoce la propiedad: '"+name.toString()+"' Valor: "+arr); //Error Sintactico
+        }else if(columnaB==false && paredB==false && puertaB==false && techoB==false && arbolB==false && personaB==false && vistaB==false){
+                    setErrors("Alerta: Lista de objetos vacia.");
+                }else{
+           // setErrors("Alerta: No se reconoce la propiedad: '"+name.toString()+"' Valor: "+arr); //Error Sintactico
         }
     }
     

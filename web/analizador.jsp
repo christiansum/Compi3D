@@ -42,9 +42,12 @@
                 <%
                     ;
                     Integer[] estados=analizador.getDetLex();
-                    for(int a=0;a<=estados.length-1;a++ ){
-                        out.println(estados[a]+"</br>");
-                    }
+                    out.println("Se han leido "+estados[0]+" signos.</br>");
+                    out.println("Se han leido "+estados[1]+" identificadores.</br>");
+                    out.println("Se han leido "+estados[2]+" numeros.</br>");
+                    out.println("Se han leido "+estados[3]+" lineas.</br>");
+                    out.println("Se han leido "+estados[4]+" operadores aritmeticos.</br>");
+                    
                 %>
             </div>
         </div>

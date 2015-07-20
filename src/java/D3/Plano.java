@@ -55,12 +55,13 @@ public class Plano {
                 dimYB=true;
                 dimY = Float.parseFloat(objto.get(1).toString());
                 //System.out.println(dimY);
-            }else if(dimXB==false && dimYB==false){
-                    setErrors("Alerta: Lista de propiedades vacia.");
             }else{
                 setErrors("Alerta: No se reconoce la propiedad: '"+objto.get(0)+"' Valor: "+objto); //Error Sintactico
             }
         }
+        if(dimXB==false && dimYB==false){
+                    setErrors("Alerta: Lista de propiedades vacia. PLANO");
+            }
     //elderprado9@gmail.com
         plano= new Box(dimX, 0.01f, dimY, Primitive.GENERATE_TEXTURE_COORDS, grama);
         posP =  new  Vector3f(0f,-2.5f,0f); 

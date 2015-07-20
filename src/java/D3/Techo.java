@@ -27,6 +27,7 @@ import javax.vecmath.Vector3f;
  */
 public class Techo {
     private ArrayList errores = new ArrayList();
+     
     
     public TransformGroup techo(ArrayList arr){
         float ancho=0;
@@ -35,9 +36,9 @@ public class Techo {
         String forma="plano";
         String orientacion="ejeY";
         float posX=0,posY=0,posZ=0;
-        
         Boolean anchoB=false, largoB=false, altoB=false, formaB=false, 
-                orientacionB=false,posXB=false,posYB=false,posZB=false;
+                orientacionB=false,posXB=false,posYB=false,posZB=false,tipoB=true;
+       
         
         Textura textu= new Textura();
         Appearance teja = textu.textura(getClass().getResource("/img/teja.jpg"));
@@ -67,7 +68,9 @@ public class Techo {
         while(ite.hasNext()){
             ArrayList objto = (ArrayList)ite.next();
             //System.out.println(objto);
-            if (objto.get(0).equals("forma")){
+            if (objto.get(0).equals("tipo")){
+                tipoB=true;
+            }else if (objto.get(0).equals("forma")){
                 formaB=true;
                 forma=objto.get(1).toString();
             }else if (objto.get(0).equals("orientacion")){
@@ -88,13 +91,13 @@ public class Techo {
             }else if (objto.get(0).equals("posY")){
                 posYB=true;
                 posY=Float.parseFloat(objto.get(1).toString());
-            }else if(anchoB==false & largoB==false && altoB==false && formaB==false && orientacionB==false && posXB==false && posYB==false && posZB==false){
-                    setErrors("Alerta: Lista de propiedades vacia.");
-            }else{
-                setErrors("Alerta: No se reconoce la propiedad: '"+objto.get(0)+"' Valor: "+objto); //Error Sintactico
+            }else {
+               // setErrors("Alerta: No se reconoce la propiedad: '"+objto.get(0)+"' Valor: "+objto); //Error Sintactico
             }
         }
-        
+        if(anchoB==false & largoB==false && altoB==false && formaB==false && orientacionB==false && posXB==false && posYB==false && posZB==false){
+                    setErrors("Alerta: Lista de propiedades vacia TECHO.");
+            }
         if (orientacion.equals("ejeX")){
             rotateTop.rotX(0);
         }else if (orientacion.equals("ejeY")){
@@ -110,38 +113,49 @@ public class Techo {
         Top2= new Box(largo,alto, ancho, Primitive.GENERATE_TEXTURE_COORDS, teja);
         
         if (forma.equals("plano")){
+            pT=  new  Vector3f(posX, posY, posZ ); 
             Top= new Box(largo,alto, ancho, Primitive.GENERATE_TEXTURE_COORDS, teja);
+
+            t3d.setTranslation(pT);
+            modelo.setTransform(t3d);
+            modelo. addChild (Top);
         }else if (forma.equals("2aguas")){
+            pD1 = new Vector3f(posX ,  posY ,  posZ);  
             Top1 = new Box(largo, ancho, alto, Primitive.GENERATE_TEXTURE_COORDS, cemento);
+            rotateTop1.rotX(Math.PI/4.0d);
+            t3d1.set(pD1);
+            rotateTop1.mul(t3d1);
+            t3d1.setTranslation(pD1);
+            modelo1.setTransform(rotateTop1);
+            modelo1.addChild(Top1);
+            
+            pD2 = new Vector3f(posX ,  posY+0.5f ,  posZ ); 
             Top2 = new Box (largo, ancho, alto, Primitive.GENERATE_TEXTURE_COORDS, cemento);
+            rotateTop2.rotX(-Math.PI/4.0d);
+            t3d2.set(pD2);
+            rotateTop2.mul(t3d2);
+            t3d2.setTranslation(pD2);
+            modelo2.setTransform(rotateTop2);
+            modelo2.addChild(Top2);
+            
+            
+            
         }else {
+            pT=  new  Vector3f(posX, posY, posZ ); 
             Top= new Box(largo,alto, ancho, Primitive.GENERATE_TEXTURE_COORDS, teja);
+
+            t3d.setTranslation(pT);
+            modelo.setTransform(t3d);
+            modelo. addChild (Top);
+            
         }
         
-        pD1 = new Vector3f(posX ,  posY ,  posZ);  
-              
-        rotateTop1.rotX(Math.PI/4.0d);
-        t3d1.set(pD1);
-        rotateTop1.mul(t3d1);
-        t3d1.setTranslation(pD1);
-        modelo1.setTransform(rotateTop1);
-        modelo1.addChild(Top1);
+        
 
       //Top2 = new Box (largo, ancho, profundidad, Primitive.GENERATE_TEXTURE_COORDS, concreto);
-        pD2 = new Vector3f(posX ,  posY+0.5f ,  posZ ); 
-        rotateTop2.rotX(-Math.PI/4.0d);
-        t3d2.set(pD2);
-        rotateTop2.mul(t3d2);
-        t3d2.setTranslation(pD2);
-        modelo2.setTransform(rotateTop2);
-        modelo2.addChild(Top2);
+        
 
-        pT=  new  Vector3f(posX, posY, posZ ); 
-
-
-        t3d.setTranslation(pT);
-        modelo.setTransform(t3d);
-        modelo. addChild (Top);
+        
             
         
         return modelo;
